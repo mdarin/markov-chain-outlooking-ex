@@ -19,7 +19,7 @@ my $prob = [];
 # k - stepno, i - stateno
 foreach my $i (0..@$p_ij-1) {
 	$prob->[0][$i] = 0;
-  if ($i == $start_state) {
+	if ($i == $start_state) {
 		$prob->[0][$i] = 1;
 	}
 }
