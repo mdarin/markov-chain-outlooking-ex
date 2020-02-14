@@ -1,0 +1,48 @@
+#!/usr/bin/perl -w
+use warnings;
+use strict;
+
+# Formula:
+#        n
+# Pj = SUMM Pi(k-1) * Pij
+#       i=1
+
+my $p_ij = [];
+$p_ij->[0] = [qw(0.7 0.1 0.1 0.1)];
+$p_ij->[1] = [qw(0.2 0.6 0.0 0.2)];
+$p_ij->[2] = [qw(0.2 0.0 0.5 0.3)];
+$p_ij->[3] = [qw(0.0 0.0 0.0 1.0)];
+
+my $start_state = 0;
+my $prob = [];
+# init start probs at the begining
+# k - stepno, i - stateno
+foreach my $i (0..@$p_ij-1) {
+	$prob->[0][$i] = 0;
+  if ($i == $start_state) {
+		$prob->[0][$i] = 1;
+	}
+}
+
+foreach my $i (0..@{$prob->[0]}-1) {
+	print " P(0)$i = $prob->[0][$i]\n";
+}
+
+# print transition Pij matrix
+print "|| Pij || = \n"; 
+foreach (@$p_ij) {
+	print " | @$_ |\n";
+}
+
+# get outlooking (process realization)
+my $n_steps = 4;
+foreach my $step (1..$n_steps) {
+	foreach my $j (0..@$p_ij-1) {
+		foreach my $i (0..@$p_ij-1) {			
+			$prob->[$step][$j] += $prob->[$step-1][$i] * $p_ij->[$i][$j]; 
+		}
+	}
+	print "P($step) = @{$prob->[$step]}\n";
+}
+
+
